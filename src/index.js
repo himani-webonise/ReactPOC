@@ -11,6 +11,25 @@ class Clock extends React.Component {
         super(props);
         this.state = {date: new Date()};
     }
+    
+    // The componentDidMount() hook runs after the component output has been rendered to the DOM. 
+    componentDidMount() {
+        this.timeID = setInterval(
+            () => this.tick(), 1000
+        );
+    }
+
+
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+
+    tick() {
+        this.setState({
+          date: new Date()
+        });
+    }
+
     render() {
         return (
           <div>
@@ -21,13 +40,12 @@ class Clock extends React.Component {
     }
 }
 
-function tick() {
-    ReactDOM.render(
-        <Clock/>,
-        document.getElementById('root')
-    );
-}
+
+ReactDOM.render(
+    <Clock/>,
+    document.getElementById('root')
+);
 
 
-setInterval(tick, 1000);
+// setInterval(tick, 1000);
 registerServiceWorker();
