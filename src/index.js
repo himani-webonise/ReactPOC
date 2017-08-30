@@ -9,7 +9,7 @@ class Clock extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {date: new Date()};
+        this.state = { date: new Date().getTime() };
     }
     
     // The componentDidMount() hook runs after the component output has been rendered to the DOM. 
@@ -25,8 +25,9 @@ class Clock extends React.Component {
     }
 
     tick() {
+        var date = new Date().getTime()
         this.setState({
-          date: new Date()
+          date: date
         });
     }
 
@@ -34,15 +35,24 @@ class Clock extends React.Component {
         return (
           <div>
             <h1>Hello, world!</h1>
-            <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+            <h2>It is {this.state.date}.</h2>
           </div>
         )
     }
 }
 
+function Application() {
+  return (
+    <div>
+      <Clock />
+      <Clock />
+      <Clock />
+    </div>
+  );
+}
 
 ReactDOM.render(
-    <Clock/>,
+    <Application/>,
     document.getElementById('root')
 );
 
