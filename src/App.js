@@ -27,7 +27,7 @@ class App extends Component {
                     <Header name={this.state.name}/>
                 </div>
                 <div>
-                    <input id="userInput" type="text"/>
+                    <input id="userInput" type="text" onChange={this.updateUser}/>
                     <button onClick={this.updateUser}>Update User</button>
                 </div>
             </div>
