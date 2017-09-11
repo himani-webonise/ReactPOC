@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import studentRecords from './results.json';
+import studentRecords from '../../static/files/results.json';
 
 class App extends Component {
     constructor(props) {
