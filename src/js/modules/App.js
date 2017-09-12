@@ -1,6 +1,26 @@
 import React, { Component } from 'react';
 import studentRecords from '../../static/files/results.json';
 
+
+class Percentage extends React.Component {
+  render() {
+    const subjects = this.props.value
+    const percentage = (subjects.english + subjects.hindi + subjects.mathematics)/3
+    return <td key={"M-"+this.props.index}>{percentage.toFixed(2)}</td>
+  }
+}
+
+function RecordTable(props) {
+  const records = props.value.results
+  var test = records.map((record, index) => {
+    return <tr key={index}><td key={"FN-"+index}>{record.firstName}</td>
+      <td key={"LN-"+index}>{record.lastName}</td>
+      <Percentage value={record.marks} index={index} />
+    </tr>
+  })
+  return <tbody key="tbody">{test}</tbody>
+}
+
 class App extends Component {
     constructor(props) {
         super(props)
@@ -8,11 +28,11 @@ class App extends Component {
             isDistinction: false,
             isFirstCls: false,
             isSecondCls: false,
-            isFail: false
+            isFail: false,
+            records: studentRecords
         }
 
         this.handleInputChange = this.handleInputChange.bind(this)
-        console.log(studentRecords)
     }
 
     handleInputChange(event) {
@@ -42,36 +62,14 @@ class App extends Component {
                 </div>
                 <div className="studentRecordCnt">
                     <table>
+                      <thead>
                         <tr>
                           <th>First Name</th>
                           <th>Last Name</th>
                           <th>Percentage</th>
                         </tr>
-                        <tr>
-                          <td>Alfreds Futterkiste</td>
-                          <td>Maria Anders</td>
-                          <td>Germany</td>
-                        </tr>
-                        <tr>
-                          <td>Centro comercial Moctezuma</td>
-                          <td>Francisco Chang</td>
-                          <td>Mexico</td>
-                        </tr>
-                        <tr>
-                          <td>Ernst Handel</td>
-                          <td>Roland Mendel</td>
-                          <td>Austria</td>
-                        </tr>
-                        <tr>
-                          <td>Island Trading</td>
-                          <td>Helen Bennett</td>
-                          <td>UK</td>
-                        </tr>
-                        <tr>
-                          <td>Laughing Bacchus Winecellars</td>
-                          <td>Yoshi Tannamuri</td>
-                          <td>Canada</td>
-                        </tr>
+                      </thead>
+                        <RecordTable value={this.state.records}/>
                     </table>
                 </div>
             </div>
