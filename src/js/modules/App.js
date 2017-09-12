@@ -10,11 +10,41 @@ class Percentage extends React.Component {
   }
 }
 
-function RecordTable(props) {
+class FirstName extends React.Component {
+  render() {
+    return <td key={"FN-"+this.props.index}>{this.props.firstName}</td>
+  }
+}
+
+class LastName extends React.Component {
+  render() {
+    return <td key={"LN-"+this.props.index}>{this.props.lastName}</td>
+  }
+}
+
+class StudentTable extends React.Component {
+  render() {
+    return(
+      <table>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Percentage</th>
+          </tr>
+        </thead>
+          <TableBody value={this.props.value}/>
+      </table>
+    )
+  }
+}
+
+function TableBody(props) {
   const records = props.value.results
   var test = records.map((record, index) => {
-    return <tr key={index}><td key={"FN-"+index}>{record.firstName}</td>
-      <td key={"LN-"+index}>{record.lastName}</td>
+    return <tr key={index}>
+      <FirstName firstName={record.firstName} index={index} />
+      <LastName lastName={record.lastName} index={index} />
       <Percentage value={record.marks} index={index} />
     </tr>
   })
@@ -61,16 +91,7 @@ class App extends Component {
                     Fail <input name="isFail" type="checkbox" checked={this.state.isFail} onChange={this.handleInputChange}/>
                 </div>
                 <div className="studentRecordCnt">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>First Name</th>
-                          <th>Last Name</th>
-                          <th>Percentage</th>
-                        </tr>
-                      </thead>
-                        <RecordTable value={this.state.records}/>
-                    </table>
+                  <StudentTable value={this.state.records}/>
                 </div>
             </div>
         </div>
