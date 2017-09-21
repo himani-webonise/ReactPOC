@@ -25,7 +25,7 @@ class LastName extends React.Component {
 class StudentTable extends React.Component {
   render() {
     return(
-      <table>
+      <table border="1">
         <thead>
           <tr>
             <th>First Name</th>
@@ -33,7 +33,7 @@ class StudentTable extends React.Component {
             <th>Percentage</th>
           </tr>
         </thead>
-          <TableBody value={this.props.value}/>
+          <TableBody value={this.props.value} search={this.props.search}/>
       </table>
     )
   }
@@ -41,12 +41,15 @@ class StudentTable extends React.Component {
 
 function TableBody(props) {
   const records = props.value.results
+  const search = props.search
   var test = records.map((record, index) => {
-    return <tr key={index}>
-      <FirstName firstName={record.firstName} index={index} />
-      <LastName lastName={record.lastName} index={index} />
-      <Percentage value={record.marks} index={index} />
-    </tr>
+    if (!search || search == record.firstName || search == record.lastName) {
+      return <tr key={index}>
+        <FirstName firstName={record.firstName} index={index} />
+        <LastName lastName={record.lastName} index={index} />
+        <Percentage value={record.marks} index={index} />
+      </tr>
+    }
   })
   return <tbody key="tbody">{test}</tbody>
 }
@@ -59,18 +62,32 @@ class App extends Component {
             isFirstCls: false,
             isSecondCls: false,
             isFail: false,
-            records: studentRecords
+            records: studentRecords,
+            search: ''
         }
 
         this.handleInputChange = this.handleInputChange.bind(this)
     }
 
     handleInputChange(event) {
-        console.log(event)
         const name = event.target.name
         this.setState({
             [name]: event.target.checked
         })
+    }
+
+    handleSearchBox(event) {
+      var x = document.getElementsByClassName('searchBox')
+      console.log(x.value)
+        this.setState({
+            search: document.getElementByClassName('searchBox').value
+        })
+    }
+
+    searchClick() {
+        var x = document.getElementByClassName('searchBox')
+        console.log(x)
+
     }
 
     render() {
@@ -81,8 +98,8 @@ class App extends Component {
             </div>
             <div className="body">
                 <div className="searchCnt">
-                    <input className="searchBox" type="text"/>
-                    <button className="searchBtn">Search</button>
+                    <input className="searchBox" name={this.state.search} type="text" onChange={this.handleSearchBox}/>
+                    <button className="searchBtn" onClick={this.searchClick} return false>Search</button>
                 </div>
                 <div className="selectionCnt">
                     Ditinction <input name="isDistinction" type="checkbox" checked={this.state.isDistinction} onChange={this.handleInputChange}/>
@@ -91,7 +108,7 @@ class App extends Component {
                     Fail <input name="isFail" type="checkbox" checked={this.state.isFail} onChange={this.handleInputChange}/>
                 </div>
                 <div className="studentRecordCnt">
-                  <StudentTable value={this.state.records}/>
+                  <StudentTable value={this.state.records} search={this.state.search}/>
                 </div>
             </div>
         </div>

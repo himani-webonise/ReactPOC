@@ -4,6 +4,6 @@
     {"firstName": "Shubham", "lastName":"Laad","marks":{"english":40, "hindi":55,"mathematics":46}},
     {"firstName": "Swapnil", "lastName":"Patil","marks":{"english":50, "hindi":60,"mathematics":77}},
     {"firstName": "Ankita", "lastName":"Pawar","marks":{"english":50, "hindi":55,"mathematics":46}},
-    {"firstName": "Vijayraj", "lastName":"Nathe","marks":{"english":35, "hindi":45,"mathematics":11}}
+    {"firstName": "Vijayraj", "lastName":"Nathe","marks":{"english":89, "hindi":45,"mathematics":11}}
   ]
 }
