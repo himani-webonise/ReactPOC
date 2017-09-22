@@ -5,9 +5,21 @@ import studentRecords from '../../static/files/results.json';
 class Percentage extends React.Component {
   render() {
     const subjects = this.props.value
-    const percentage = (subjects.english + subjects.hindi + subjects.mathematics)/3
+    const percentage = calculatePercentage(subjects)
+    if (percentage> 35)  {
+      this.props.bColor = true
+    }
     return <td key={"M-"+this.props.index}>{percentage.toFixed(2)}</td>
   }
+}
+
+function calculatePercentage(subjects) {
+  var sum = subjects.english + subjects.hindi + subjects.mathematics
+  return sum/3
+}
+
+function setBackground() {
+
 }
 
 class FirstName extends React.Component {
@@ -27,7 +39,7 @@ class StudentTable extends React.Component {
     return(
       <table border="1">
         <thead>
-          <tr>
+          <tr bgcolor="red">
             <th>First Name</th>
             <th>Last Name</th>
             <th>Percentage</th>
@@ -42,16 +54,17 @@ class StudentTable extends React.Component {
 function TableBody(props) {
   const records = props.value.results
   const search = props.search
-  var test = records.map((record, index) => {
-    if (!search || search == record.firstName || search == record.lastName) {
-      return <tr key={index}>
+  var bColor = false
+  var recordResult = records.map((record, index) => {
+    if (!search.length || search == record.firstName || search == record.lastName) {
+      return <tr key={index} { this.bColor ? className="fail" : ''}>
         <FirstName firstName={record.firstName} index={index} />
         <LastName lastName={record.lastName} index={index} />
-        <Percentage value={record.marks} index={index} />
+        <Percentage value={record.marks} index={index} bColor={this.bColor}/>
       </tr>
     }
   })
-  return <tbody key="tbody">{test}</tbody>
+  return <tbody key="tbody">{recordResult}</tbody>
 }
 
 class App extends Component {
@@ -76,18 +89,12 @@ class App extends Component {
         })
     }
 
-    handleSearchBox(event) {
-      var x = document.getElementsByClassName('searchBox')
-      console.log(x.value)
-        this.setState({
-            search: document.getElementByClassName('searchBox').value
-        })
-    }
-
-    searchClick() {
-        var x = document.getElementByClassName('searchBox')
+    searchClick(event) {
+        var x = document.getElementsByClassName('searchBox')
         console.log(x)
-
+        this.setState({
+            search: document.getElementsByClassName('searchBox')[0].value
+        })
     }
 
     render() {
@@ -98,8 +105,8 @@ class App extends Component {
             </div>
             <div className="body">
                 <div className="searchCnt">
-                    <input className="searchBox" name={this.state.search} type="text" onChange={this.handleSearchBox}/>
-                    <button className="searchBtn" onClick={this.searchClick} return false>Search</button>
+                    <input className="searchBox" type="text"/>
+                    <button className="searchBtn" name="search" onClick={this.searchClick.bind(this)} return false>Search</button>
                 </div>
                 <div className="selectionCnt">
                     Ditinction <input name="isDistinction" type="checkbox" checked={this.state.isDistinction} onChange={this.handleInputChange}/>
@@ -113,6 +120,23 @@ class App extends Component {
             </div>
         </div>
       );
+    }
+
+
+    componentWillReceiveProps(next) {
+
+    }
+
+    shouldComponentUpdate() {
+      return true
+    }
+
+    componentWillUnmount() {
+
+    }
+
+    forceUpdate() {
+
     }
 }
 
