@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
 import studentRecords from '../../static/files/results.json';
+import '../../static/css/style.css';
 
-
-class Percentage extends React.Component {
-  render() {
-    const subjects = this.props.value
-    const percentage = calculatePercentage(subjects)
-    if (percentage> 35)  {
-      this.props.bColor = true
-    }
-    return <td key={"M-"+this.props.index}>{percentage.toFixed(2)}</td>
-  }
-}
 
 function calculatePercentage(subjects) {
   var sum = subjects.english + subjects.hindi + subjects.mathematics
@@ -35,36 +25,81 @@ class LastName extends React.Component {
 }
 
 class StudentTable extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: this.props.value
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      value: newProps.value
+    })
+  }
+
   render() {
     return(
-      <table border="1">
+      <table>
         <thead>
-          <tr bgcolor="red">
+          <tr>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Percentage</th>
           </tr>
         </thead>
-          <TableBody value={this.props.value} search={this.props.search}/>
+          <TableBody value={this.state.value} search={this.props.search}/>
       </table>
     )
   }
 }
 
-function TableBody(props) {
-  const records = props.value.results
-  const search = props.search
-  var bColor = false
-  var recordResult = records.map((record, index) => {
-    if (!search.length || search == record.firstName || search == record.lastName) {
-      return <tr key={index} { this.bColor ? className="fail" : ''}>
-        <FirstName firstName={record.firstName} index={index} />
-        <LastName lastName={record.lastName} index={index} />
-        <Percentage value={record.marks} index={index} bColor={this.bColor}/>
-      </tr>
+class TableBody extends  React  .Component  {
+    constructor(props) {
+      super(props)
+      this.state = {
+        value  : this.props.value
+      }
     }
-  })
-  return <tbody key="tbody">{recordResult}</tbody>
+
+/*    handleBColorChange(percentage) {
+      if(percentage < 35) {
+        this.setState({
+          bColor: true
+        })
+      } else {
+        this.setState({
+          bColor: false
+        })
+      }
+    }*/
+
+    componentDidMount(event) {
+    }
+
+    render() {
+      var _this = this;
+      const search = this.props.search
+      var recordResult = this.state.value.results.map((record, index) => {
+        if (!search.length || search == record.firstName || search == record.lastName) {
+          return <tr key={index} className={this.bColor ? "fail" : ""}>
+            <FirstName firstName={record.firstName} index={index} />
+            <LastName lastName={record.lastName} index={index} />
+            <Percentage value={record.marks} index={index} />
+          </tr>
+        }
+      })
+      return <tbody key="tbody">{recordResult}</tbody>
+    }
+}
+
+class Percentage extends React.Component {
+  render() {
+    const subjects = this.props.value
+    const percentage = calculatePercentage(subjects)
+    return <td key={"M-"+this.props.index}>{percentage.toFixed(2)}</td>
+  }
 }
 
 class App extends Component {
@@ -106,7 +141,7 @@ class App extends Component {
             <div className="body">
                 <div className="searchCnt">
                     <input className="searchBox" type="text"/>
-                    <button className="searchBtn" name="search" onClick={this.searchClick.bind(this)} return false>Search</button>
+                    <button className="searchBtn" name="search" onClick={this.searchClick.bind(this)}>Search</button>
                 </div>
                 <div className="selectionCnt">
                     Ditinction <input name="isDistinction" type="checkbox" checked={this.state.isDistinction} onChange={this.handleInputChange}/>
